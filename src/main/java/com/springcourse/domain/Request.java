@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springcourse.domain.enums.RequestState;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "request")
-public class Request implements Serializable{
+public class Request implements Serializable {
 
 	/**
 	 * 
@@ -58,7 +59,8 @@ public class Request implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "owner_id", nullable = false)
 	private User owner;
-	
+
+	@Getter(onMethod = @__({ @JsonIgnore }))
 	@OneToMany(mappedBy = "request")
 	private List<RequestStage> stages = new ArrayList<>();
 
