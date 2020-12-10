@@ -5,10 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +21,7 @@ import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLogindto;
 import com.springcourse.dto.UserSavedto;
+import com.springcourse.dto.UserUpdateRoledto;
 import com.springcourse.dto.UserUpdatedto;
 import com.springcourse.model.PageModel;
 import com.springcourse.model.PageRequestModel;
@@ -75,6 +76,17 @@ public class UserResource {
 	public ResponseEntity<List<Request>> listAllRequestsById(@PathVariable(name = "id") Long id) {
 		List<Request> requests = requestService.listAllByOwnerId(id);
 		return ResponseEntity.ok(requests);
+	}
+
+	@PatchMapping("/role/{id}")
+	public ResponseEntity<?> updateRole(@PathVariable(name = "id") Long id, @RequestBody UserUpdateRoledto userdto) {
+		User user = new User();
+		user.setId(id);
+		user.setRole(userdto.getRole());
+
+		userService.updateRole(user);
+
+		return ResponseEntity.ok().build();
 	}
 
 }

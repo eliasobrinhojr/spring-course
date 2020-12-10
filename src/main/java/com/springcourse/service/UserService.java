@@ -47,17 +47,21 @@ public class UserService {
 		List<User> users = userRepository.findAll();
 		return users;
 	}
-	
-	public PageModel<User> listAllOnLazyMode(PageRequestModel pr){
+
+	public PageModel<User> listAllOnLazyMode(PageRequestModel pr) {
 		Pageable pageable = PageRequest.of(pr.getPage(), pr.getSize());
 		Page<User> page = userRepository.findAll(pageable);
-		PageModel<User> pm = new PageModel<>((int)page.getTotalElements(), page.getSize(), page.getTotalPages(), page.getContent());
-		return pm;
+
+		return new PageModel<>((int) page.getTotalElements(), page.getSize(), page.getTotalPages(), page.getContent());
 	}
 
 	public User login(String email, String password) {
 		password = HashUtil.getSecureHash(password);
 		Optional<User> result = userRepository.login(email, password);
 		return result.get();
+	}
+
+	public int updateRole(User user) {
+		return userRepository.updateRole(user.getId(), user.getRole());
 	}
 }
